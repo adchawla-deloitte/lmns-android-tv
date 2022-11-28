@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +24,7 @@ public interface DirectoryService {
     Call<ServedDirectoryResponse> serveDirectory(@Path("pk") int pk);
 
     @GET("server/directoryContent/{pk}")
-    Call<DirectoryContent> getDirectoryContent(@Path("pk") int pk);
+    Call<JsonObject> getDirectoryContent(@Path("pk") int pk);
 
     final OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)

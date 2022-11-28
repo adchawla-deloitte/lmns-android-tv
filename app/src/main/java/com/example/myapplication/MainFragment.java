@@ -35,6 +35,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -282,7 +284,7 @@ public class MainFragment extends BrowseSupportFragment {
                         dirs.add(d.dir_name);
                         pks.add(d.pk);
                 }
-                getDirectoryContent(pks);
+                getDirectoryContent_(pks);
 //                Log.d("DATAITEM", pks.toString());
                 MovieList.MOVIE_CATEGORY = movieCategories;
 
@@ -296,52 +298,52 @@ public class MainFragment extends BrowseSupportFragment {
         });
     }
 
-    public static void getDirectoryContent(@NonNull List<Integer> pks) {
-
+    public static void getDirectoryContent_(@Nullable List<Integer> pks) {
         iterator = 0;
         while(iterator < pks.size()) {
-//            Log.d("Hello", "get directory content of pk " + pks.get(iterator));
-            Call<DirectoryContent> directoryContent = DirectoryService.service.getDirectoryContent(pks.get(iterator));
-//            int finalI = i;
-
-
-            directoryContent.enqueue(new Callback<DirectoryContent>() {
-
+            Call<ServedDirectoryResponse> servedDirectoryResponseCall = DirectoryService.service.serveDirectory(pks.get(iterator));
+            servedDirectoryResponseCall.enqueue(new Callback<ServedDirectoryResponse>() {
                 @Override
-                public void onResponse(Call<DirectoryContent> call, Response<DirectoryContent> response) {
-                    final DirectoryContent content;
-                    content = response.body();
-                    List<String> res = content.directoryContent;
-                    Log.d("Response", res.toString());
+                public void onResponse(Call<ServedDirectoryResponse> call, Response<ServedDirectoryResponse> response) {
+                    ServedDirectoryResponse resp = response.body();
+                    List<Movie> list = new ArrayList<>();
+                    Log.d("SERVERIP", resp.serverip.toString());
+                    Call<JsonObject> directoryContent = DirectoryService.service.getDirectoryContent(pks.get(iterator - 1));
 
-                    Log.d("FinalI", "Before passing to 2nd API" + (iterator - 1));
-                    Call<ServedDirectoryResponse> servedDirectoryResponseCall = DirectoryService.service.serveDirectory(pks.get(iterator - 1));
-                    servedDirectoryResponseCall.enqueue(new Callback<ServedDirectoryResponse>() {
+                    directoryContent.enqueue(new Callback<JsonObject>() {
+
                         @Override
-                        public void onResponse(Call<ServedDirectoryResponse> call, Response<ServedDirectoryResponse> response) {
-                            ServedDirectoryResponse resp = response.body();
-                            List<Movie> list = new ArrayList<>();
-                            if(resp == null)
-                                return;
+                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                            final JsonObject content;
+                            content = response.body();
+                            assert content != null;
+                            JsonArray array = content.getAsJsonArray("directoryContent");
+//                            Log.d("CONTENT", array.toString());
+
                             int count = 0;
-                            for (String r : res) {
-                                String[] arr = r.split("\\.");
+                            for (int j = 0; j < array.size(); j++) {
+//                                Log.d("ITERATOR", array.get(j).getAsJsonArray().get(0).toString());
+                                String str =  (String) array.get(j).getAsJsonArray().get(1).getAsString();
+                                String[]arr = str.split("\\.");
+
                                 int len = arr.length;
+
+//                                Log.d("STRING", arr[len - 1].substring(0));
                                 Movie movie = new Movie();
+                                //movie.setVideoUrl("http://" + resp.serverip + "/" + (String)array.get(j).getAsJsonArray().get(1).getAsString());
                                 if (arr[len - 1].equals("mp3") || arr[len - 1].equals("mp4")) {
-//                                    Movie movie = new Movie();
-                                    movie.setVideoUrl("http://" + resp.serverip + "/" + r);
+                                    movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                     movie.setId(count);
-                                    movie.setTitle(r);
+                                    movie.setTitle(array.get(j).getAsJsonArray().get(1).toString());
                                     movie.setType(1);
                                     movie.setCardImageUrl("https://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review/card.jpg");
-                                    //finalRes.add("http://" + resp.serverip + "/" + r);
+
 
                                 } else if(arr[len - 1].equals("png") || arr[len - 1].equals("jpg") || arr[len - 1].equals("jpeg")) {
-                                    movie.setTitle(r);
+                                    movie.setTitle(array.get(j).getAsJsonArray().get(0).toString());
                                     movie.setId(count);
-                                    movie.setCardImageUrl("http://" + resp.serverip + "/" + r);
-                                    movie.setVideoUrl("http://" + resp.serverip + "/" + r);
+                                    movie.setCardImageUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
+                                    movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                     movie.setType(2);
                                 }
                                 list.add(movie);
@@ -355,28 +357,41 @@ public class MainFragment extends BrowseSupportFragment {
 
 
                             Log.d("ITERATOR", n + "");
-                            movieMap.put(n - 1, list);
+                            movieMap.put(0, list);
                             Log.d("Movie List", movieMap.toString());
+
+
+                            Log.d("FinalI", "Before passing to 2nd API" + (iterator - 1));
 
 
                         }
 
                         @Override
-                        public void onFailure(Call<ServedDirectoryResponse> call, Throwable t) {
-                            Log.d("ServedDirectory", "Unable to retrieve served directory", t);
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.d("DIRECTORY", "Could not fetch", t);
                         }
                     });
 
                 }
 
                 @Override
-                public void onFailure(Call<DirectoryContent> call, Throwable t) {
-                    Log.d("DIRECTORY", "Could not fetch", t);
+                public void onFailure(Call<ServedDirectoryResponse> call, Throwable t) {
+                    Log.d("ServedDirectory", "Unable to retrieve served directory", t);
                 }
             });
             iterator++;
         }
-
     }
+
+//    public static void getDirectoryContent(@NonNull List<Integer> pks) {
+//
+//        iterator = 0;
+//        while(iterator < pks.size()) {
+////            Log.d("Hello", "get directory content of pk " + pks.get(iterator));
+//
+//            iterator++;
+//        }
+//
+//    }
 
 }
