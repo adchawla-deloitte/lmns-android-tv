@@ -28,13 +28,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         MainFragment.getDirectories();
-//        MainFragment.getDirectoryContent();
-//        if (savedInstanceState == null) {
-//            MainFragment.getDirectories();
-//            getSupportFragmentManager().beginTransaction()
-//                    .replace(R.id.main_browse_fragment, new MainFragment())
-//                    .commitNow();
-//        }
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {

@@ -297,8 +297,7 @@ public class MainFragment extends BrowseSupportFragment {
     }
 
     public static void getDirectoryContent(@NonNull List<Integer> pks) {
-//        HashMap<Integer, List<Movie>> map = new HashMap<>();
-//        int i;
+
         iterator = 0;
         while(iterator < pks.size()) {
 //            Log.d("Hello", "get directory content of pk " + pks.get(iterator));
@@ -348,11 +347,7 @@ public class MainFragment extends BrowseSupportFragment {
                                 list.add(movie);
                                 count++;
                             }
-                            //String[] urls = new String[count];
-//                            for(int j = 0; j < count; j++) {
-//                                urls[j] = finalRes.get(j);
-//                            }
-                            //MovieList.videoUrls = urls;
+
                             int n = iterator;
                             while(movieMap.containsKey(n)) {
                                 n++;
@@ -363,9 +358,7 @@ public class MainFragment extends BrowseSupportFragment {
                             movieMap.put(n - 1, list);
                             Log.d("Movie List", movieMap.toString());
 
-                            //Log.d("DIRECTORY", finalRes.toString());
-//                            "Zeitgeist 2010_ Year in Review"
-//                            "https://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review/card.jpg"
+
                         }
 
                         @Override
