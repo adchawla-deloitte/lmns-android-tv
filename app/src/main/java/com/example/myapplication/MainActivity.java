@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity {
             }
         };
 
-        handler.postDelayed(runnable, 10000);
+        handler.postDelayed(runnable, 5000);
 
 //        new Handler().postDelayed(new Runnable() {
 //            @Override

@@ -13,14 +13,7 @@ import retrofit2.Response;
 
 public class MovieList {
 
-    public static String MOVIE_CATEGORY[] = {
-            "Category Zero",
-            "Category One",
-            "Category Two",
-            "Category Three",
-            "Category Four",
-            "Category Five",
-    };
+    public static List<DirectoryDataItem> MOVIE_CATEGORY;
 
     public static List<Movie> list;
     private static long count = 0;

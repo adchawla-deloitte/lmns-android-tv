@@ -34,9 +34,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /*
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
@@ -174,14 +181,75 @@ public class VideoDetailsFragment extends DetailsSupportFragment {
     private void setupRelatedMovieListRow() {
         String subcategories[] = {getString(R.string.related_movies)};
         ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(new CardPresenter());
-        for(int i = 0; i < MovieList.MOVIE_CATEGORY.length; i++) {
-            for (int j = 0; j < MainFragment.movieMap.get(i).size(); j++) {
-                listRowAdapter.add(MainFragment.movieMap.get(i).get(j % MainFragment.movieMap.get(i).size()));
+        Call<ServedDirectoryResponse> servedDirectoryResponseCall = DirectoryService.service.serveDirectory(MovieList.MOVIE_CATEGORY.get(0).pk);
+        servedDirectoryResponseCall.enqueue(new Callback<ServedDirectoryResponse>() {
+            @Override
+            public void onResponse(Call<ServedDirectoryResponse> call, Response<ServedDirectoryResponse> response) {
+                ServedDirectoryResponse resp = response.body();
+                List<Movie> list = new ArrayList<>();
+                Log.d("SERVERIP", resp.serverip.toString());
+                Call<JsonObject> directoryContent = DirectoryService.service.getDirectoryContent(MovieList.MOVIE_CATEGORY.get(0).pk);
+
+                directoryContent.enqueue(new Callback<JsonObject>() {
+
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        final JsonObject content;
+                        content = response.body();
+                        assert content != null;
+                        JsonArray array = content.getAsJsonArray("directoryContent");
+//                            Log.d("CONTENT", array.toString());
+
+                        int count = 0;
+                        for (int j = 0; j < array.size(); j++) {
+//                                Log.d("ITERATOR", array.get(j).getAsJsonArray().get(0).toString());
+                            String str =  (String) array.get(j).getAsJsonArray().get(1).getAsString();
+                            String[]arr = str.split("\\.");
+
+                            int len = arr.length;
+
+//                                Log.d("STRING", arr[len - 1].substring(0));
+                            Movie movie = new Movie();
+                            //movie.setVideoUrl("http://" + resp.serverip + "/" + (String)array.get(j).getAsJsonArray().get(1).getAsString());
+                            if (arr[len - 1].equals("mp3") || arr[len - 1].equals("mp4")) {
+                                movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
+                                movie.setId(count);
+                                movie.setTitle(array.get(j).getAsJsonArray().get(0).getAsString());
+                                movie.setType(1);
+                                movie.setCardImageUrl("https://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review/card.jpg");
+
+
+                            } else if(arr[len - 1].equals("png") || arr[len - 1].equals("jpg") || arr[len - 1].equals("jpeg")) {
+                                movie.setTitle(array.get(j).getAsJsonArray().get(0).toString());
+                                movie.setId(count);
+                                movie.setCardImageUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
+                                movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(0).getAsString());
+                                movie.setType(2);
+                            }
+                            listRowAdapter.add(movie);
+                            count++;
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.d("DIRECTORY", "Could not fetch", t);
+                    }
+                });
+
             }
-        }
+
+            @Override
+            public void onFailure(Call<ServedDirectoryResponse> call, Throwable t) {
+                Log.d("ServedDirectory", "Unable to retrieve served directory", t);
+            }
+        });
 
 
-        HeaderItem header = new HeaderItem(0, subcategories[0]);
+        HeaderItem header = new HeaderItem(0, MovieList.MOVIE_CATEGORY.get(0).dir_name);
         mAdapter.add(new ListRow(header, listRowAdapter));
         mPresenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
     }
