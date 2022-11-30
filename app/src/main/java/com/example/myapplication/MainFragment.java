@@ -110,7 +110,7 @@ public class MainFragment extends BrowseSupportFragment {
 //                listRowAdapter.add(movieMap.get(i).get(j % movieMap.get(i).size()));
 //            }
             HeaderItem header = new HeaderItem(i, MovieList.MOVIE_CATEGORY.get(i).dir_name);
-            rowsAdapter.add(new ListRow(header, listRowAdapter));
+            rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenter())));
         }
         setAdapter(rowsAdapter);
 
@@ -251,6 +251,7 @@ public class MainFragment extends BrowseSupportFragment {
                         for(int i = 0; i < MovieList.MOVIE_CATEGORY.size(); i++) {
                             ListRow listRow = (ListRow) rowsAdapter.get(i);
                             ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) listRow.getAdapter();
+                            Log.d("ARRAYOBJECT1", arrayObjectAdapter.size() + "");
                             arrayObjectAdapter.clear();
                         }
 
