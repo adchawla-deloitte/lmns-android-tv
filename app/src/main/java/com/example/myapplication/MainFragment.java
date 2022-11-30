@@ -303,11 +303,12 @@ public class MainFragment extends BrowseSupportFragment {
                                                 }
                                             } else if(MovieList.MOVIE_CATEGORY.get(getHeadersSupportFragment().getSelectedPosition()).dir_type.equals("2")) {
                                                 if(arr[len - 1].equals("mp3")) {
+                                                    Log.d("URL", "http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setId(count);
                                                     movie.setTitle(array.get(j).getAsJsonArray().get(0).getAsString());
                                                     movie.setType(1);
-                                                    movie.setCardImageUrl("https://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review/card.jpg");
+                                                    movie.setCardImageUrl("https://cdn-icons-png.flaticon.com/512/59/59343.png");
                                                 }
                                             } else if(MovieList.MOVIE_CATEGORY.get(getHeadersSupportFragment().getSelectedPosition()).dir_type.equals("3")) {
                                                 if(arr[len - 1].equals("png") || arr[len - 1].equals("jpg") || arr[len - 1].equals("jpeg")) {
