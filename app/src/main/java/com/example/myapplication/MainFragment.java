@@ -286,7 +286,10 @@ public class MainFragment extends BrowseSupportFragment {
 
                                             String str =  (String) array.get(j).getAsJsonArray().get(1).getAsString();
                                             String[]arr = str.split("\\.");
-
+                                            StringBuilder sb = new StringBuilder();
+                                            for(int i = 0; i < arr.length - 1; i++) {
+                                                sb.append(arr[i]);
+                                            }
                                             int len = arr.length;
                                             Movie movie = new Movie();
                                             //movie.setVideoUrl("http://" + resp.serverip + "/" + (String)array.get(j).getAsJsonArray().get(1).getAsString());
@@ -296,7 +299,7 @@ public class MainFragment extends BrowseSupportFragment {
                                                     movie.setId(count);
                                                     movie.setTitle(array.get(j).getAsJsonArray().get(0).getAsString());
                                                     movie.setType(1);
-                                                    movie.setCardImageUrl("https://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review/card.jpg");
+                                                    movie.setCardImageUrl("http://" + resp.serverip + "/" + "Thumbnails/" + sb.toString() + ".jpg");
                                                 }
                                             } else if(MovieList.MOVIE_CATEGORY.get(getHeadersSupportFragment().getSelectedPosition()).dir_type.equals("2")) {
                                                 if(arr[len - 1].equals("mp3")) {
@@ -308,7 +311,7 @@ public class MainFragment extends BrowseSupportFragment {
                                                 }
                                             } else if(MovieList.MOVIE_CATEGORY.get(getHeadersSupportFragment().getSelectedPosition()).dir_type.equals("3")) {
                                                 if(arr[len - 1].equals("png") || arr[len - 1].equals("jpg") || arr[len - 1].equals("jpeg")) {
-                                                    movie.setTitle(array.get(j).getAsJsonArray().get(0).toString());
+                                                    movie.setTitle(array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setId(count);
                                                     movie.setCardImageUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(0).getAsString());
