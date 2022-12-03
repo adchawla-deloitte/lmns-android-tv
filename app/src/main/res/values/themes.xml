@@ -1,0 +1,5 @@
+<resources>
+
+    <style name="Theme.UIPractice" parent="@style/Theme.Leanback" />
+    <style name="Theme.UIPractice1" parent="@style/Theme.MaterialComponents.Light.DarkActionBar" />
+</resources>
