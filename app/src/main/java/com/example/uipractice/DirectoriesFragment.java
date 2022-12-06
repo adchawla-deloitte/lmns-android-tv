@@ -285,7 +285,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
                             }
                         });
                     }
-                }, 2000);
+                }, 1000);
             }
         }
     }

@@ -27,8 +27,8 @@ public interface DirectoryService {
     Call<JsonObject> getDirectoryContent(@Path("pk") int pk);
 
     final OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .readTimeout(10, TimeUnit.SECONDS)
-            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(5, TimeUnit.SECONDS)
             .build();
 
     Retrofit retrofit = new Retrofit.Builder()
