@@ -13,25 +13,10 @@
         android:layout_height="match_parent"
         android:layout_weight="0.5"
         android:orientation="vertical"
-        android:background="#fff">
+        android:background="@drawable/loginpage">
 
-        <TextView
-            android:id="@+id/logo_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hello_there_welcome_back"
-            android:textSize="40sp"
-            android:transitionName="logo_text"
-            android:textColor="#000"
-            android:layout_marginTop="35dp"/>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="334dp"
-            android:layout_height="286dp"
-            android:layout_gravity="center_horizontal"
-            tools:src="@tools:sample/backgrounds/scenic"
-            android:contentDescription="@string/todo" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -40,19 +25,25 @@
         android:layout_height="match_parent"
         android:layout_weight="0.5"
         android:orientation="vertical"
-        android:background="@drawable/img">
+        android:background="#010101">
 
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical"
+        android:background="#010101"
+        tools:ignore="Suspicious0dp">
         <TextView
             android:id="@+id/slogan_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sign_in_to_continue"
             android:textSize="30dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="30dp"
             android:textStyle="bold"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="0dp"
             android:layout_gravity="center"/>
 
         <EditText
@@ -69,7 +60,7 @@
             android:background="#30ffffff"
             android:drawableLeft="@drawable/ic_baseline_person_outline_24"
             android:drawablePadding="10dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="0dp"
             android:nextFocusDown="@id/password"
             android:privateImeOptions="horizontalAlignment=left"
              />
@@ -88,30 +79,19 @@
             android:background="#30ffffff"
             android:drawableLeft="@drawable/ic_baseline_info_24"
             android:drawablePadding="10dp"
-            android:nextFocusDown="@id/forgot_password"
+            android:nextFocusDown="@id/go"
             android:nextFocusUp="@id/user"
             android:privateImeOptions="horizontalAlignment=left"
             />
-
+    </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="20dp"
             android:orientation="vertical">
 
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="50dp"
-                android:layout_gravity="right"
-                android:layout_marginRight="90dp"
-                android:background="@drawable/button"
-                android:elevation="0dp"
-                android:text="@string/forget_password"
-                android:id="@+id/forgot_password"
-                android:nextFocusUp="@id/password"
-                android:nextFocusDown="@id/go"
-                />
+
 
             <Button
                 android:id="@+id/go"
@@ -124,7 +104,13 @@
                 android:textColor="#fff"
                 android:padding="10dp"
                 android:layout_gravity="center"
-                android:nextFocusUp="@id/forgot_password"/>
+                android:nextFocusUp="@id/go"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:insetLeft="0dp"
+                android:insetRight="0dp"
+                app:cornerRadius="0dp"
+                style="?android:attr/borderlessButtonStyle" />
 
 
         </LinearLayout>
