@@ -82,6 +82,7 @@
             android:nextFocusDown="@id/go"
             android:nextFocusUp="@id/user"
             android:privateImeOptions="horizontalAlignment=left"
+            android:inputType="textPassword"
             />
     </LinearLayout>
         <LinearLayout

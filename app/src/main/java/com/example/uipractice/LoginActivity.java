@@ -2,9 +2,13 @@ package com.example.uipractice;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -17,6 +21,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends FragmentActivity {
     Button send;
+    EditText username, password;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,19 +29,80 @@ public class LoginActivity extends FragmentActivity {
         getDirectories();
 
         send = (Button) findViewById(R.id.go);
-
+        username = (EditText) findViewById(R.id.user);
+        password = (EditText) findViewById(R.id.password);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, DirectoriesActivity.class);
                 LoginActivity.this.startActivity(intent);
+//                if(TextUtils.isEmpty(username.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
+//                    Toast.makeText(LoginActivity.this, "Username / Password is empty", Toast.LENGTH_LONG).show();
+//                } else {
+//                    login();
+//                }
             }
 
         });
 
 
     }
+
+//    public void login() {
+//        LoginRequest loginRequest = new LoginRequest();
+//        loginRequest.setPassword(password.getText().toString());
+//        loginRequest.setUsername(username.getText().toString());
+//        Call<LoginResponse> loginResponseCall = UserService.service.loginUser(loginRequest);
+//        loginResponseCall.enqueue(new Callback<LoginResponse>() {
+//            @Override
+//            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+//                if(response.isSuccessful()) {
+//                    Log.d("LOGINRESPONSE", response.body().getToken().toString());
+//                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            getIP(response.body().toString());
+//                            getDirectories();
+//                            startActivity(new Intent(LoginActivity.this, DirectoriesActivity.class));
+//                        }
+//                    }, 700);
+////                    new Handler().postDelayed(new Runnable() {
+////                        @Override
+////                        public void run() {
+////                            getDirectories();
+////                        }
+////                    }, 200);
+//                } else {
+//                    Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+//                    startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<LoginResponse> call, Throwable t) {
+//                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
+//
+//    public void getIP(String token) {
+//        Call<IpResponse> ipResponseCall = UserService.service.retrieveIp("Token " + token);
+//        ipResponseCall.enqueue(new Callback<IpResponse>() {
+//            @Override
+//            public void onResponse(Call<IpResponse> call, Response<IpResponse> response) {
+//                if(response.isSuccessful()) {
+//                    Constants.BASE_URL = "http://" + response.body().getIp() + ":8000/";
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<IpResponse> call, Throwable t) {
+//                Log.d("IPFAILED", t.toString());
+//            }
+//        });
+//    }
 
     public static void getDirectories() {
         Call<List<DirectoryDataItem>> getDirectory = DirectoryService.service.getDirectory();
