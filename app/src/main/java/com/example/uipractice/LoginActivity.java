@@ -70,6 +70,7 @@ public class LoginActivity extends FragmentActivity {
                         public void run() {
 //                            getDirectories();
                             startActivity(new Intent(LoginActivity.this, DirectoriesActivity.class));
+                            finish();
                         }
                     }, 700);
                 } else {

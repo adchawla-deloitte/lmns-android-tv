@@ -27,6 +27,6 @@ public class FilesDisplayActivity extends FragmentActivity {
                 }
             }
         };
-        handler.postDelayed(runnable, 5000);
+        handler.postDelayed(runnable, 3000);
     }
 }

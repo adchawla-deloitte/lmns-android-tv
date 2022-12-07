@@ -44,6 +44,7 @@ public class MainActivity extends FragmentActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 MainActivity.this.startActivity(intent);
+                finish();
             }
 
         });

@@ -52,7 +52,7 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private static final int GRID_ITEM_WIDTH = 200;
     private static final int GRID_ITEM_HEIGHT = 200;
-    private static final int NUM_ROWS = 6;
+    private static final int NUM_ROWS = 20;
     private static final int NUM_COLS = 15;
     public static int prevPosition = -1;
     private final Handler mHandler = new Handler(Looper.myLooper());
@@ -78,11 +78,9 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         CardPresenterMovie cardPresenter = new CardPresenterMovie();
         ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-        ArrayList<Movie> list = new ArrayList<>();
-//        list = (ArrayList<Movie>) getActivity().getIntent().getSerializableExtra("MOVIELIST");
-        String dirName = (String) getActivity().getIntent().getSerializableExtra("DIRECTORY");
+//        String dirName = (String) getActivity().getIntent().getSerializableExtra("DIRECTORY");
 //        int i = 0;
-        HeaderItem header = new HeaderItem(0, dirName);
+        HeaderItem header = new HeaderItem(0, "");
         //rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenter())));
         for(int i = 0; i < movieList.size(); i++) {
             listRowAdapter.add(movieList.get(i));
