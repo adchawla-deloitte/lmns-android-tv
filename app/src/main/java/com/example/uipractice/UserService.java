@@ -26,7 +26,7 @@ public interface UserService {
             .build();
 
     Retrofit retrofit1 = new Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(Constants.LOGIN_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient1)
             .build();

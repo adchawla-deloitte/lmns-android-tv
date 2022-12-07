@@ -26,7 +26,7 @@ public class LoginActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
-        getDirectories();
+        //getDirectories();
 
         send = (Button) findViewById(R.id.go);
         username = (EditText) findViewById(R.id.user);
@@ -35,13 +35,15 @@ public class LoginActivity extends FragmentActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, DirectoriesActivity.class);
-                LoginActivity.this.startActivity(intent);
-//                if(TextUtils.isEmpty(username.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
-//                    Toast.makeText(LoginActivity.this, "Username / Password is empty", Toast.LENGTH_LONG).show();
-//                } else {
-//                    login();
-//                }
+//                Intent intent = new Intent(LoginActivity.this, DirectoriesActivity.class);
+//                LoginActivity.this.startActivity(intent);
+                if(TextUtils.isEmpty(username.getText().toString()) || TextUtils.isEmpty(password.getText().toString())) {
+                    Toast.makeText(LoginActivity.this, "Username / Password is empty", Toast.LENGTH_LONG).show();
+                } else {
+                    login();
+                    //Log.d("BASEURL", Constants.BASE_URL);
+                   // getDirectories();
+                }
             }
 
         });
@@ -49,60 +51,66 @@ public class LoginActivity extends FragmentActivity {
 
     }
 
-//    public void login() {
-//        LoginRequest loginRequest = new LoginRequest();
-//        loginRequest.setPassword(password.getText().toString());
-//        loginRequest.setUsername(username.getText().toString());
-//        Call<LoginResponse> loginResponseCall = UserService.service.loginUser(loginRequest);
-//        loginResponseCall.enqueue(new Callback<LoginResponse>() {
-//            @Override
-//            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-//                if(response.isSuccessful()) {
-//                    Log.d("LOGINRESPONSE", response.body().getToken().toString());
-//                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            getIP(response.body().toString());
+    public void login() {
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setPassword(password.getText().toString());
+        loginRequest.setUsername(username.getText().toString());
+        Call<LoginResponse> loginResponseCall = UserService.service.loginUser(loginRequest);
+        loginResponseCall.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if(response.isSuccessful()) {
+                    Log.d("LOGINRESPONSE", response.body().getToken().toString());
+                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                    getIP(response.body().getToken().toString());
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
 //                            getDirectories();
-//                            startActivity(new Intent(LoginActivity.this, DirectoriesActivity.class));
-//                        }
-//                    }, 700);
-////                    new Handler().postDelayed(new Runnable() {
-////                        @Override
-////                        public void run() {
-////                            getDirectories();
-////                        }
-////                    }, 200);
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
-//                    startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<LoginResponse> call, Throwable t) {
-//                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//    }
-//
-//    public void getIP(String token) {
-//        Call<IpResponse> ipResponseCall = UserService.service.retrieveIp("Token " + token);
-//        ipResponseCall.enqueue(new Callback<IpResponse>() {
-//            @Override
-//            public void onResponse(Call<IpResponse> call, Response<IpResponse> response) {
-//                if(response.isSuccessful()) {
-//                    Constants.BASE_URL = "http://" + response.body().getIp() + ":8000/";
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<IpResponse> call, Throwable t) {
-//                Log.d("IPFAILED", t.toString());
-//            }
-//        });
-//    }
+                            startActivity(new Intent(LoginActivity.this, DirectoriesActivity.class));
+                        }
+                    }, 700);
+                } else {
+//                    Log.d("FAILURE 1", t.toString());
+                    Toast.makeText(LoginActivity.this, "Login Failed 1", Toast.LENGTH_LONG).show();
+                    startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Log.d("FAILURE 1", t.toString());
+                Toast.makeText(LoginActivity.this, "Login Failed 2", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+            }
+        });
+    }
+
+    public void getIP(String token) {
+        Call<IpResponse> ipResponseCall = UserService.service.retrieveIp("Token " + token);
+        ipResponseCall.enqueue(new Callback<IpResponse>() {
+            @Override
+            public void onResponse(Call<IpResponse> call, Response<IpResponse> response) {
+                if(response.isSuccessful()) {
+                    Log.d("IPADDRESS", response.body().getIp().toString());
+                    Constants.BASE_URL = "http://" + response.body().getIp() + ":8000";
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getDirectories();
+                        }
+                    }, 100);
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IpResponse> call, Throwable t) {
+                startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+                Log.d("IPFAILED", t.toString());
+            }
+        });
+    }
 
     public static void getDirectories() {
         Call<List<DirectoryDataItem>> getDirectory = DirectoryService.service.getDirectory();

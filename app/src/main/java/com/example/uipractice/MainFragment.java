@@ -5,10 +5,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +29,7 @@ public class MainFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button button;
-
+    private EditText username, password;
     public MainFragment() {
         // Required empty public constructor
     }
@@ -59,16 +62,19 @@ public class MainFragment extends Fragment {
         }
 
 
-        button = (Button) button.findViewById(R.id.go);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // do something
-                Intent intent = new Intent(getActivity(), DirectoriesActivity.class);
-                getActivity().startActivity(intent);
-
-            }
-        });
+//        button = (Button) button.findViewById(R.id.go);
+//        username = (EditText) username.findViewById(R.id.user);
+//        password = (EditText) password.findViewById(R.id.password);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // do something
+////                Intent intent = new Intent(getActivity(), DirectoriesActivity.class);
+////                getActivity().startActivity(intent);
+//
+//
+//            }
+//        });
 
 
     }
