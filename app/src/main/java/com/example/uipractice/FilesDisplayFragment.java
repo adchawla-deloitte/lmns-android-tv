@@ -76,17 +76,41 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
 
     private void loadRows() {
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        CardPresenterMovie cardPresenter = new CardPresenterMovie();
-        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+//        CardPresenterMovie cardPresenter = new CardPresenterMovie();
+//        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
 //        String dirName = (String) getActivity().getIntent().getSerializableExtra("DIRECTORY");
 //        int i = 0;
-        HeaderItem header = new HeaderItem(0, "");
-        //rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenter())));
-        for(int i = 0; i < movieList.size(); i++) {
-            listRowAdapter.add(movieList.get(i));
+//        HeaderItem header = new HeaderItem(0, "");
+        int rows = (movieList.size() / 5 )+ 1;
+        for(int i = 0; i < rows; i++) {
+            HeaderItem header = new HeaderItem(i, "");
+            rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenterMovie())));
         }
-        rowsAdapter.add(new ListRow(header, listRowAdapter));
+
         setAdapter(rowsAdapter);
+
+        int count = 0;
+        int currentRow = 0;
+        while(count < movieList.size()) {
+            ListRow listRow = (ListRow) rowsAdapter.get(currentRow);
+            ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) listRow.getAdapter();
+            int num = 5;
+            while(count < movieList.size() && num-->0) {
+                arrayObjectAdapter.add(movieList.get(count));
+                count++;
+            }
+            if(count >= movieList.size())
+                break;
+            currentRow++;
+        }
+
+
+        //rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenter())));
+//        for(int i = 0; i < movieList.size(); i++) {
+//            listRowAdapter.add(movieList.get(i));
+//        }
+       // rowsAdapter.add(new ListRow(header, listRowAdapter));
+
     }
 
     public void setRows() {
