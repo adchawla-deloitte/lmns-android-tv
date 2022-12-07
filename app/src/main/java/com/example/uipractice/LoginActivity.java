@@ -55,6 +55,8 @@ public class LoginActivity extends FragmentActivity {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setPassword(password.getText().toString());
         loginRequest.setUsername(username.getText().toString());
+        password.setText("");
+        username.setText("");
         Call<LoginResponse> loginResponseCall = UserService.service.loginUser(loginRequest);
         loginResponseCall.enqueue(new Callback<LoginResponse>() {
             @Override
@@ -73,7 +75,14 @@ public class LoginActivity extends FragmentActivity {
                 } else {
 //                    Log.d("FAILURE 1", t.toString());
                     Toast.makeText(LoginActivity.this, "Login Failed 1", Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                            startActivity(new Intent(getIntent()));
+                        }
+                    }, 700);
+
                 }
             }
 
@@ -81,7 +90,13 @@ public class LoginActivity extends FragmentActivity {
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Log.d("FAILURE 1", t.toString());
                 Toast.makeText(LoginActivity.this, "Login Failed 2", Toast.LENGTH_LONG).show();
-                startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                        startActivity(new Intent(getIntent()));
+                    }
+                }, 700);
             }
         });
     }
@@ -106,7 +121,13 @@ public class LoginActivity extends FragmentActivity {
 
             @Override
             public void onFailure(Call<IpResponse> call, Throwable t) {
-                startActivity(new Intent(LoginActivity.this, BrowseErrorActivity.class));
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                        startActivity(new Intent(getIntent()));
+                    }
+                }, 700);
                 Log.d("IPFAILED", t.toString());
             }
         });
