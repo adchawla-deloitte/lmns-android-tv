@@ -1,5 +1,7 @@
 package com.example.uipractice;
 
+import static com.example.uipractice.MainActivity.transitionToast;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +27,7 @@ public class LoginActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        transitionToast.cancel();
         setContentView(R.layout.fragment_main);
         //getDirectories();
 
@@ -69,7 +72,8 @@ public class LoginActivity extends FragmentActivity {
                         @Override
                         public void run() {
 //                            getDirectories();
-                            startActivity(new Intent(LoginActivity.this, DirectoriesActivity.class));
+//                            transitionToast.makeText(LoginActivity.this, R.string.loading, Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             finish();
                         }
                     }, 700);

@@ -93,12 +93,14 @@ public class VideoDetailsFragment extends DetailsSupportFragment {
 //                    }
 //                });
 //    }
+//    https://static.vecteezy.com/system/resources/previews/000/115/312/non_2x/free-music-background-vector.jpg
+//    https://media3.giphy.com/media/J86RyTPk2mv4gE1jZD/giphy.gif
 
     private void setupDetailsOverviewRow() {
         Log.d(TAG, "doInBackground: " + mSelectedMovie.toString());
         final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedMovie);
         row.setImageDrawable(
-                ContextCompat.getDrawable(getActivity(), R.drawable.default_background));
+                ContextCompat.getDrawable(getActivity(), R.color.selected_background));
         int width = convertDpToPixel(getActivity().getApplicationContext(), DETAIL_THUMB_WIDTH);
         int height = convertDpToPixel(getActivity().getApplicationContext(), DETAIL_THUMB_HEIGHT);
         Glide.with(getActivity())
@@ -120,7 +122,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment {
         actionAdapter.add(
                 new Action(
                         ACTION_WATCH_TRAILER,
-                        "Play Content"));
+                        "Play"));
 
         row.setActionsAdapter(actionAdapter);
 

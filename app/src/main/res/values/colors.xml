@@ -2,8 +2,8 @@
     <color name="background_gradient_start">#000000</color>
     <color name="background_gradient_end">#DDDDDD</color>
     <color name="fastlane_background">#0096a6</color>
-    <color name="search_opaque">#FF7032</color>
-    <color name="selected_background">#FF7032</color>
+    <color name="search_opaque">#181818</color>
+    <color name="selected_background">#AA0610</color>
     <color name="default_background">#3d3d3d</color>
     <color name="light_blue_400">#FF29B6F6</color>
     <color name="light_blue_600">#FF039BE5</color>

@@ -2,6 +2,7 @@ package com.example.uipractice;
 
 import static com.example.uipractice.MovieList.movieList;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,6 +65,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
     private String mBackgroundUri;
     private static String[] directories;
     public static int iterator;
+    private ProgressBar prg;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +121,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
                 directory.setId(DirectoryList.DIRECTORY_CATEGORY.get(i).pk);
                 directory.setTitle(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_name());
                 directory.setDir_type(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_type());
-                directory.setCardImageUrl("https://cdn-icons-png.flaticon.com/512/4732/4732435.png");
+                directory.setCardImageUrl("https://github.com/adhyanchawla/banner-repo/blob/master/red-folder-video.png?raw=true");
             } else if(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_type().equals("2")) {
                 ListRow listRow = (ListRow) rowsAdapter.get(1);
                 ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) listRow.getAdapter();
@@ -126,7 +129,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
                 directory.setId(DirectoryList.DIRECTORY_CATEGORY.get(i).pk);
                 directory.setTitle(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_name());
                 directory.setDir_type(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_type());
-                directory.setCardImageUrl("https://cdn-icons-png.flaticon.com/512/4732/4732438.png");
+                directory.setCardImageUrl("https://github.com/adhyanchawla/banner-repo/blob/master/red-folder-music.png?raw=true");
                 arrayObjectAdapter.add(directory);
             } else {
                 ListRow listRow = (ListRow) rowsAdapter.get(2);
@@ -135,7 +138,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
                 directory.setId(DirectoryList.DIRECTORY_CATEGORY.get(i).pk);
                 directory.setTitle(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_name());
                 directory.setDir_type(DirectoryList.DIRECTORY_CATEGORY.get(i).getDir_type());
-                directory.setCardImageUrl("https://cdn-icons-png.flaticon.com/512/4732/4732432.png");
+                directory.setCardImageUrl("https://github.com/adhyanchawla/banner-repo/blob/master/red-folder-pictures.png?raw=true");
                 arrayObjectAdapter.add(directory);
             }
 
@@ -182,6 +185,14 @@ public class DirectoriesFragment extends BrowseSupportFragment {
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.directories_main, container, false);
+//        prg = (ProgressBar)view.findViewById(R.id.progressBar1);
+//
+//        return view;
+//    }
+
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
@@ -198,6 +209,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
                     public void run() {
                         Log.d("PK", pk + "");
                         Call<ServedDirectoryResponse> servedDirectoryResponseCall = DirectoryService.service.serveDirectory(pk);
+
                         servedDirectoryResponseCall.enqueue(new Callback<ServedDirectoryResponse>() {
                             @Override
                             public void onResponse(Call<ServedDirectoryResponse> call, Response<ServedDirectoryResponse> response) {
@@ -210,12 +222,13 @@ public class DirectoriesFragment extends BrowseSupportFragment {
 
                                     @Override
                                     public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+//                                        prg.setVisibility(View.INVISIBLE);
                                         final JsonObject content;
                                         content = response.body();
                                         assert content != null;
                                         JsonArray array = content.getAsJsonArray("directoryContent");
 
-                                        int count = 0;
+                                        int count = 1;
                                         for (int j = 0; j < array.size(); j++) {
 
                                             String str = (String) array.get(j).getAsJsonArray().get(1).getAsString();
@@ -266,6 +279,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
                                         intent.putExtra("DIRECTORY", ((Directory) item).getDir_name());
                                         Log.d("DIRNAME", ((Directory) item).getTitle());
                                         MovieList.dirSelected = ((Directory) item).getTitle();
+//                                        Toast.makeText(getActivity(), R.string.loading, Toast.LENGTH_LONG).show();
                                         startActivity(intent);
 
 
@@ -273,6 +287,7 @@ public class DirectoriesFragment extends BrowseSupportFragment {
 
                                     @Override
                                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                                        prg.setVisibility(View.INVISIBLE);
                                         Log.d("DIRECTORY", "Could not fetch", t);
                                     }
                                 });

@@ -1,9 +1,12 @@
 package com.example.uipractice;
 
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 import static com.example.uipractice.MovieList.dirSelected;
 import static com.example.uipractice.MovieList.movieList;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +14,8 @@ import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +36,10 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.MultiTransformation;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.JsonArray;
@@ -42,6 +51,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,12 +73,14 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
     private String mBackgroundUri;
     private static String[] directories;
     public static int iterator;
-
+    ImageView imageView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHeadersState(HEADERS_DISABLED);
+        mBackgroundUri = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzy4ghMjcnwq8MiHmX4SSfpEEpUcSxis9B3A&usqp=CAU";
         loadRows();
+        setTitle("");
         setupUIElements();
         prepareBackgroundManager();
 
@@ -76,40 +89,40 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
 
     private void loadRows() {
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-//        CardPresenterMovie cardPresenter = new CardPresenterMovie();
-//        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
+        CardPresenterMovie cardPresenter = new CardPresenterMovie();
+        ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
 //        String dirName = (String) getActivity().getIntent().getSerializableExtra("DIRECTORY");
 //        int i = 0;
-//        HeaderItem header = new HeaderItem(0, "");
-        int rows = (movieList.size() / 5 )+ 1;
-        for(int i = 0; i < rows; i++) {
-            HeaderItem header = new HeaderItem(i, "");
-            rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenterMovie())));
-        }
-
-        setAdapter(rowsAdapter);
-
-        int count = 0;
-        int currentRow = 0;
-        while(count < movieList.size()) {
-            ListRow listRow = (ListRow) rowsAdapter.get(currentRow);
-            ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) listRow.getAdapter();
-            int num = 5;
-            while(count < movieList.size() && num-->0) {
-                arrayObjectAdapter.add(movieList.get(count));
-                count++;
-            }
-            if(count >= movieList.size())
-                break;
-            currentRow++;
-        }
-
-
-        //rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenter())));
-//        for(int i = 0; i < movieList.size(); i++) {
-//            listRowAdapter.add(movieList.get(i));
+        HeaderItem header = new HeaderItem(0, "Showing content from " + MovieList.dirSelected);
+//        int rows = (movieList.size() / 5 )+ 1;
+//        for(int i = 0; i < rows; i++) {
+//            HeaderItem header = new HeaderItem(i, "");
+//            rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenterMovie())));
 //        }
-       // rowsAdapter.add(new ListRow(header, listRowAdapter));
+//
+//        setAdapter(rowsAdapter);
+
+//        int count = 0;
+//        int currentRow = 0;
+//        while(count < movieList.size()) {
+//            ListRow listRow = (ListRow) rowsAdapter.get(currentRow);
+//            ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) listRow.getAdapter();
+//            int num = 5;
+//            while(count < movieList.size() && num-->0) {
+//                arrayObjectAdapter.add(movieList.get(count));
+//                count++;
+//            }
+//            if(count >= movieList.size())
+//                break;
+//            currentRow++;
+//        }
+
+
+        for(int i = 0; i < movieList.size(); i++) {
+            listRowAdapter.add(movieList.get(i));
+        }
+        rowsAdapter.add(new ListRow(header, listRowAdapter));
+        setAdapter(rowsAdapter);
 
     }
 
@@ -123,12 +136,12 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
         setTitle("Now sharing files from " + MovieList.dirSelected); // Badge, when set, takes precedent
         // over title
 //        setHeadersState(HEADERS_ENABLED);
-        setHeadersTransitionOnBackEnabled(true);
+  //      setHeadersTransitionOnBackEnabled(true);
 
         // set fastLane (or headers) background color
 //        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background));
 //         set search icon color
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
+//        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
     }
 
     private void prepareBackgroundManager() {
@@ -142,14 +155,14 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
     }
 
     private void setupEventListeners() {
-        setOnSearchClickedListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
-                        .show();
-            }
-        });
+//        setOnSearchClickedListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
+//                        .show();
+//            }
+//        });
 
         setOnItemViewClickedListener(new FilesDisplayFragment.ItemViewClickedListener());
         setOnItemViewSelectedListener(new FilesDisplayFragment.ItemViewSelectedListener());
@@ -184,6 +197,14 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
         }
     }
 
+    private void startBackgroundTimer() {
+        if (null != mBackgroundTimer) {
+            mBackgroundTimer.cancel();
+        }
+        mBackgroundTimer = new Timer();
+        mBackgroundTimer.schedule(new UpdateBackgroundTask(), BACKGROUND_UPDATE_DELAY);
+    }
+
 
     private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
         @Override
@@ -196,6 +217,20 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
             if (item instanceof Movie) {
                 Movie movie = (Movie) item;
                 Log.d("MOVIEITEM", "Item: " + item.toString());
+                if(movie.getTitle() != null) {
+                    mBackgroundUri = ((Movie) item).getBackgroundUrl();
+                }
+
+
+                startBackgroundTimer();
+                if(movie.getTitle() != null) {
+                    String name = ((Movie) item).getTitle().split("\\.")[0];
+                    setTitle(name);
+                }
+
+
+
+
 //                Intent intent = new Intent(getActivity(), DetailsActivity.class);
 //                intent.putExtra(DetailsActivity.MOVIE, movie);
 //
@@ -228,6 +263,7 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
     private void updateBackground(String uri) {
                 int width = mMetrics.widthPixels;
                 int height = mMetrics.heightPixels;
+                //imageView = (ImageView) imageView.findViewById(R.id.bg);
                 Glide.with(getActivity())
                         .load(uri)
                         .centerCrop()

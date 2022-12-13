@@ -40,7 +40,8 @@
             android:exported="false" />
         <activity
             android:name=".FilesDisplayActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".BrowseErrorActivity"
             android:exported="false" />
@@ -52,6 +53,9 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HomeActivity"
             android:exported="false" />
     </application>
 

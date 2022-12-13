@@ -13,6 +13,15 @@ public class Movie implements Serializable {
 //    private String bgImageUrl;
     private String cardImageUrl;
     private String videoUrl;
+    private String backgroundUrl;
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
+    }
+
+    public void setBackgroundUrl(String backgroundUrl) {
+        this.backgroundUrl = backgroundUrl;
+    }
 
     public int getType() {
         return type;

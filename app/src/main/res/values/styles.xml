@@ -4,4 +4,8 @@
         <item name="android:background">@color/gray_400</item>
         <item name="exampleColor">@color/light_blue_400</item>
     </style>
+    <style name="AppTheme.Leanback.CustomTitle" parent="Theme.Leanback.Browse">
+        <item name="browseTitleViewLayout">@layout/titleview</item>
+        <item name="browseRowsMarginTop">60dp</item>
+    </style>
 </resources>
