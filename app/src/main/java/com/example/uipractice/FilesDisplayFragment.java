@@ -174,6 +174,7 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
             //Log.d("item", item.toString());
             if (item instanceof Movie) {
+                mBackgroundUri = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzy4ghMjcnwq8MiHmX4SSfpEEpUcSxis9B3A&usqp=CAU";
                 Movie movie = (Movie) item;
                 Log.d("MOVIEITEM", "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);

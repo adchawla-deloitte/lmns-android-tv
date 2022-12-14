@@ -72,7 +72,7 @@ public class HomeFragment extends BrowseSupportFragment {
         setHeadersState(HEADERS_DISABLED);
         loadRows();
         setupUIElements();
-        prepareBackgroundManager();
+        //prepareBackgroundManager();
         setRows();
         setupEventListeners();
     }
