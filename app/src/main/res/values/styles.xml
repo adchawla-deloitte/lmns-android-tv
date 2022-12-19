@@ -8,4 +8,15 @@
         <item name="browseTitleViewLayout">@layout/titleview</item>
         <item name="browseRowsMarginTop">60dp</item>
     </style>
+    <style name="Widget.Leanback.SearchOrbViewStyle">
+        <item name="android:paddingLeft">700dp</item>
+<!--        <item name="android:paddingBottom">200dp</item>-->
+        <item name="searchOrbIcon">@drawable/logout_pure</item>
+        <item name="searchOrbColor">@color/selected_background</item>
+<!--        <item name="searchOrbIconColor">@color/light_blue_400</item>-->
+        <item name="searchOrbBrightColor">@color/selected_background</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+<!--        <item name="android:paddingBottom">200dp</item>-->
+    </style>
 </resources>

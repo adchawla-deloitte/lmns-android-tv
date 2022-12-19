@@ -91,31 +91,9 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         CardPresenterMovie cardPresenter = new CardPresenterMovie();
         ArrayObjectAdapter listRowAdapter = new ArrayObjectAdapter(cardPresenter);
-//        String dirName = (String) getActivity().getIntent().getSerializableExtra("DIRECTORY");
-//        int i = 0;
-        HeaderItem header = new HeaderItem(0, "Showing content from " + MovieList.dirSelected);
-//        int rows = (movieList.size() / 5 )+ 1;
-//        for(int i = 0; i < rows; i++) {
-//            HeaderItem header = new HeaderItem(i, "");
-//            rowsAdapter.add(new ListRow(header, new ArrayObjectAdapter(new CardPresenterMovie())));
-//        }
-//
-//        setAdapter(rowsAdapter);
 
-//        int count = 0;
-//        int currentRow = 0;
-//        while(count < movieList.size()) {
-//            ListRow listRow = (ListRow) rowsAdapter.get(currentRow);
-//            ArrayObjectAdapter arrayObjectAdapter = (ArrayObjectAdapter) listRow.getAdapter();
-//            int num = 5;
-//            while(count < movieList.size() && num-->0) {
-//                arrayObjectAdapter.add(movieList.get(count));
-//                count++;
-//            }
-//            if(count >= movieList.size())
-//                break;
-//            currentRow++;
-//        }
+        HeaderItem header = new HeaderItem(0, "Showing content from " + MovieList.dirSelected);
+
 
 
         for(int i = 0; i < movieList.size(); i++) {
@@ -126,22 +104,10 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
 
     }
 
-    public void setRows() {
 
-    }
 
     private void setupUIElements() {
-        // setBadgeDrawable(getActivity().getResources().getDrawable(
-        // R.drawable.videos_by_google_banner));
         setTitle("Now sharing files from " + MovieList.dirSelected); // Badge, when set, takes precedent
-        // over title
-//        setHeadersState(HEADERS_ENABLED);
-  //      setHeadersTransitionOnBackEnabled(true);
-
-        // set fastLane (or headers) background color
-//        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background));
-//         set search icon color
-//        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
     }
 
     private void prepareBackgroundManager() {
@@ -155,14 +121,7 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
     }
 
     private void setupEventListeners() {
-//        setOnSearchClickedListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
-//                        .show();
-//            }
-//        });
+
 
         setOnItemViewClickedListener(new FilesDisplayFragment.ItemViewClickedListener());
         setOnItemViewSelectedListener(new FilesDisplayFragment.ItemViewSelectedListener());
@@ -174,8 +133,8 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
             //Log.d("item", item.toString());
             if (item instanceof Movie) {
-                mBackgroundUri = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzy4ghMjcnwq8MiHmX4SSfpEEpUcSxis9B3A&usqp=CAU";
                 Movie movie = (Movie) item;
+                mBackgroundUri = movie.getBackgroundUrl();
                 Log.d("MOVIEITEM", "Item: " + item.toString());
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 intent.putExtra(DetailsActivity.MOVIE, movie);
@@ -228,19 +187,6 @@ public class FilesDisplayFragment extends BrowseSupportFragment {
                     String name = ((Movie) item).getTitle().split("\\.")[0];
                     setTitle(name);
                 }
-
-
-
-
-//                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-//                intent.putExtra(DetailsActivity.MOVIE, movie);
-//
-//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                                getActivity(),
-//                                ((ImageCardView) itemViewHolder.view).getMainImageView(),
-//                                DetailsActivity.SHARED_ELEMENT_NAME)
-//                        .toBundle();
-//                getActivity().startActivity(intent, bundle);
             }
 
 

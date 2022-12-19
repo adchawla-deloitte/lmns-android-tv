@@ -24,8 +24,9 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="280dp"
-    tools:ignore="UselessParent">
+    android:layout_height="250dp"
+    tools:ignore="UselessParent"
+    >
     <com.smarteist.autoimageslider.SliderView
         android:id="@+id/slider"
         android:layout_width="match_parent"

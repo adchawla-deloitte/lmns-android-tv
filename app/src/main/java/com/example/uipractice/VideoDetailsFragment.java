@@ -30,6 +30,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 
+import java.util.ArrayList;
+
 /*
  * LeanbackDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
  * It shows a detailed view of video and its meta plus related videos.
@@ -151,8 +153,11 @@ public class VideoDetailsFragment extends DetailsSupportFragment {
                     Intent intent;
                     if(mSelectedMovie.getType() == 1) {
                         intent = new Intent(getActivity(), PlaybackActivity.class);
-                    } else {
+                    } else if(mSelectedMovie.getType() == 2){
                         intent = new Intent(getActivity(), ImageFullScreenActivity.class);
+                    } else {
+                        MovieList.movieList = new ArrayList<>();
+                        intent = new Intent(getActivity(), HomeActivity.class);
                     }
                     intent.putExtra(DetailsActivity.MOVIE, mSelectedMovie);
                     startActivity(intent);

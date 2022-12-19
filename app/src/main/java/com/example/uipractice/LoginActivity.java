@@ -65,6 +65,7 @@ public class LoginActivity extends FragmentActivity {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 if(response.isSuccessful()) {
+                    Constants.user = loginRequest.getUsername();
                     Log.d("LOGINRESPONSE", response.body().getToken().toString());
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
                     getIP(response.body().getToken().toString());
@@ -139,12 +140,13 @@ public class LoginActivity extends FragmentActivity {
     }
 
     public static void getDirectories() {
-        Call<List<DirectoryDataItem>> getDirectory = DirectoryService.service.getDirectory();
+        Call<List<DirectoryDataItem>> getDirectory = DirectoryService.service.getDirectory(Constants.user);
         getDirectory.enqueue(new Callback<List<DirectoryDataItem>>() {
             @Override
             public void onResponse(@NonNull Call<List<DirectoryDataItem>> call, Response<List<DirectoryDataItem>> response) {
                 DirectoryList.DIRECTORY_CATEGORY = response.body();
 
+                assert DirectoryList.DIRECTORY_CATEGORY != null;
                 for (DirectoryDataItem item : DirectoryList.DIRECTORY_CATEGORY) {
                     Log.d("DIRECTORYDATA", item.dir_name.toString());
                     String[] dirName = item.getDir_name().split("/");

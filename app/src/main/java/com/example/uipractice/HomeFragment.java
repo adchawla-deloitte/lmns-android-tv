@@ -77,6 +77,13 @@ public class HomeFragment extends BrowseSupportFragment {
         setupEventListeners();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRows();
+        setRows();
+    }
+
     private void loadRows() {
         rowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         CardPresenter cardPresenter = new CardPresenter();
@@ -162,6 +169,7 @@ public class HomeFragment extends BrowseSupportFragment {
 //        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
     }
 
+
     private void prepareBackgroundManager() {
 
         mBackgroundManager = BackgroundManager.getInstance(getActivity());
@@ -173,14 +181,18 @@ public class HomeFragment extends BrowseSupportFragment {
     }
 
     private void setupEventListeners() {
-//        setOnSearchClickedListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
+        setOnSearchClickedListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+//                                        intent.putExtra("MOVIE-LIST", ArrayList<Movie>movieList);
+//                intent.putExtra("DIRECTORY", ((Directory) item).getDir_name());
+                startActivity(intent);
 //                Toast.makeText(getActivity(), "Implement your own in-app search", Toast.LENGTH_LONG)
 //                        .show();
-//            }
-//        });
+            }
+        });
 
         setOnItemViewClickedListener(new HomeFragment.ItemViewClickedListener());
         setOnItemViewSelectedListener(new HomeFragment.ItemViewSelectedListener());
@@ -238,30 +250,38 @@ public class HomeFragment extends BrowseSupportFragment {
                                             for (int i = 0; i < arr.length - 1; i++) {
                                                 sb.append(arr[i]);
                                             }
+                                            Log.d("STRING", sb.toString());
                                             int len = arr.length;
+                                            if(array.get(j) == null || array.get(j).getAsJsonArray().get(1) == null)
+                                                continue;
+
                                             Movie movie = new Movie();
+
                                             //movie.setVideoUrl("http://" + resp.serverip + "/" + (String)array.get(j).getAsJsonArray().get(1).getAsString());
                                             if (((Directory) item).getDir_type().equals("1")) {
-                                                if (arr[len - 1].equals("mp4")) {
+                                                if (arr[len - 1].equals("mp4") || arr[len - 1].equals("webm")) {
+                                                    Log.d("DATA", array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setId(count);
                                                     movie.setTitle(array.get(j).getAsJsonArray().get(0).getAsString().split("\\.")[0]);
                                                     movie.setType(1);
-                                                    movie.setCardImageUrl("http://" + resp.serverip + "/" + "Thumbnails/" + sb.toString() + ".png");
-                                                    movie.setBackgroundUrl("http://" + resp.serverip + "/" + "Thumbnails/" + sb.toString() + "_shadowed.png");
+                                                    movie.setCardImageUrl("http://" + resp.serverip + "/" + "Thumbnails/" + sb + ".png");
+                                                    movie.setBackgroundUrl("http://" + resp.serverip + "/" + "Thumbnails/" + sb + "_shadowed.png");
                                                 }
                                             } else if (((Directory) item).getDir_type().equals("2")) {
                                                 if (arr[len - 1].equals("mp3")) {
+                                                    Log.d("DATA", array.get(j).getAsJsonArray().get(1).getAsString());
                                                     Log.d("URL", "http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setVideoUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setId(count);
                                                     movie.setTitle(array.get(j).getAsJsonArray().get(0).getAsString().split("\\.")[0]);
                                                     movie.setType(1);
                                                     movie.setCardImageUrl("https://static.vecteezy.com/system/resources/previews/000/115/312/non_2x/free-music-background-vector.jpg");
-                                                    movie.setBackgroundUrl("https://static.vecteezy.com/system/resources/previews/000/115/312/non_2x/free-music-background-vector.jpg");
+                                                    movie.setBackgroundUrl("https://github.com/adhyanchawla/banner-repo/blob/master/audio-shadowed.png?raw=true");
                                                 }
                                             } else if (((Directory) item).getDir_type().equals("3")) {
                                                 if (arr[len - 1].equals("png") || arr[len - 1].equals("jpg") || arr[len - 1].equals("jpeg")) {
+                                                    Log.d("DATA", array.get(j).getAsJsonArray().get(1).getAsString());
                                                     movie.setTitle(array.get(j).getAsJsonArray().get(0).getAsString().split("\\.")[0]);
                                                     movie.setId(count);
                                                     movie.setCardImageUrl("http://" + resp.serverip + "/" + array.get(j).getAsJsonArray().get(1).getAsString());
@@ -270,8 +290,8 @@ public class HomeFragment extends BrowseSupportFragment {
                                                     movie.setType(2);
                                                 }
                                             }
-
-                                            movieList.add(movie);
+                                            if(movie.getVideoUrl() != null)
+                                                movieList.add(movie);
 
 
                                             count++;

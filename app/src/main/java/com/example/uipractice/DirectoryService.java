@@ -14,8 +14,8 @@ import retrofit2.http.Path;
 
 public interface DirectoryService {
 
-    @GET("/server/directory")
-    Call<List<DirectoryDataItem>> getDirectory();
+    @GET("/server/directory/{dir_owner}")
+    Call<List<DirectoryDataItem>> getDirectory(@Path("dir_owner") String dirOwner);
 
     @GET("/server/directory/{pk}")
     Call<DirectoryDataItem> getDirectoryFromId(@Path("pk") int pk);
